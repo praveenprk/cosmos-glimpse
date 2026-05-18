@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CosmosGlimpse</title>
+  <link rel="stylesheet" href="newtab.css" />
+</head>
+<body>
+
+  <!-- Full-screen background image -->
+  <div id="bg" class="bg"></div>
+
+  <!-- Vignette overlay -->
+  <div class="vignette"></div>
+
+  <!-- Loading state -->
+  <div id="loader" class="loader">
+    <div class="loader-dot"></div>
+    <div class="loader-dot"></div>
+    <div class="loader-dot"></div>
+  </div>
+
+  <!-- Error state -->
+  <div id="error-state" class="error-state hidden">
+    <p class="error-icon">✦</p>
+    <p class="error-msg">The cosmos is loading.<br/>Check your connection or NASA API key.</p>
+    <button id="retry-btn" class="retry-btn">Retry</button>
+  </div>
+
+  <!-- Image info panel — bottom left -->
+  <div id="info-panel" class="info-panel hidden">
+    <p class="info-date" id="info-date"></p>
+    <h1 class="info-title" id="info-title"></h1>
+    <p class="info-credit" id="info-credit"></p>
+    <a class="info-source" id="info-source" target="_blank" rel="noopener noreferrer">
+      <span class="source-label">source:</span>
+      <span id="info-source-url"></span>
+    </a>
+  </div>
+
+  <!-- Top right: expand explanation -->
+  <button id="expand-btn" class="expand-btn hidden" title="About this image">?</button>
+
+  <!-- Explanation drawer -->
+  <div id="explanation-drawer" class="explanation-drawer hidden">
+    <button id="close-drawer" class="close-drawer">✕</button>
+    <p id="explanation-text" class="explanation-text"></p>
+  </div>
+
+  <!-- Bottom right: API badge -->
+  <div id="api-badge" class="api-badge hidden"></div>
+
+  <script src="newtab.js"></script>
+</body>
+</html>
