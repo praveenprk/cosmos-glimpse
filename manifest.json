@@ -10,8 +10,7 @@
   ],
 
   "host_permissions": [
-    "https://api.nasa.gov/*",
-    "https://images-api.nasa.gov/*"
+    "https://cosmosglimpse-worker.cosmosglimpse.workers.dev/*"
   ],
 
   "background": {

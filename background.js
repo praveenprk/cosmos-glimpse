@@ -1,6 +1,5 @@
-const NASA_API_BASE = "https://api.nasa.gov";
+const WORKER_URL    = "https://cosmosglimpse-worker.cosmosglimpse.workers.dev";
 const NASA_IMAGE_API = "https://images-api.nasa.gov";
-const API_KEY = "d14VSXtcHpeuJRQCnfVxIoMe3Z9sykyA3dTk6BN8";
 const BATCH_SIZE = 25;
 const REFETCH_THRESHOLD = 5;
 const BATCH_STALE_HOURS = 24;
@@ -32,10 +31,29 @@ function randomDateBetween(start, end) {
 
 // ─── Fetchers ────────────────────────────────────────────────────────────────
 
+async function fetchTodayAPOD() {
+  const date = new Date().toISOString().split("T")[0];
+  const url = `${WORKER_URL}/apod?date=${date}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`APOD today fetch failed: ${res.status}`);
+  const data = await res.json();
+  if (data.media_type !== "image") return null;
+  return {
+    id: `apod-${date}`,
+    title: data.title,
+    url: data.hdurl || data.url,
+    date: data.date,
+    explanation: data.explanation,
+    source: `https://apod.nasa.gov/apod/ap${date.replace(/-/g, "").slice(2)}.html`,
+    credit: data.copyright || "NASA / APOD",
+    api: "APOD"
+  };
+}
+
 async function fetchAPOD() {
   // Random date between APOD launch and today
   const date = randomDateBetween("1995-06-16", new Date().toISOString().split("T")[0]);
-  const url = `${NASA_API_BASE}/planetary/apod?api_key=${API_KEY}&date=${date}`;
+  const url = `${WORKER_URL}/apod?date=${date}`;
 
   const res = await fetch(url);
   if (!res.ok) throw new Error(`APOD fetch failed: ${res.status}`);
@@ -57,7 +75,7 @@ async function fetchAPOD() {
 }
 
 async function fetchNASALibrary(term) {
-  const url = `${NASA_IMAGE_API}/search?q=${encodeURIComponent(term)}&media_type=image&year_start=2000&page=${Math.floor(Math.random() * 5) + 1}`;
+  const url = `${WORKER_URL}/library?q=${encodeURIComponent(term)}&year_start=2000&page=${Math.floor(Math.random() * 5) + 1}`;
 
   const res = await fetch(url);
   if (!res.ok) throw new Error(`Library fetch failed: ${res.status}`);
@@ -96,6 +114,14 @@ async function fetchNASALibrary(term) {
 async function buildBatch() {
   const batch = [];
   const errors = [];
+
+  // Always lead with today's APOD
+  try {
+    const today = await fetchTodayAPOD();
+    if (today) batch.push(today);
+  } catch (e) {
+    errors.push(e.message);
+  }
 
   // 70% APOD (curated, high quality), 30% Library (variety)
   const apodTarget = Math.floor(BATCH_SIZE * 0.7);
@@ -170,6 +196,12 @@ async function isBatchStale(fetchedAt) {
 
 async function fetchMini() {
   const batch = [];
+  // Today first
+  try {
+    const today = await fetchTodayAPOD();
+    if (today) batch.push(today);
+  } catch (e) {}
+  // Fill 2 more random
   let attempts = 0;
   while (batch.length < 3 && attempts < 10) {
     attempts++;

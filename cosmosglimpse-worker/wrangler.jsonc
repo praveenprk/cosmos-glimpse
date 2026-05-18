@@ -1,0 +1,5 @@
+{
+  "name": "cosmosglimpse-worker",
+  "compatibility_date": "2026-05-18",
+  "main": "worker.js"
+}
