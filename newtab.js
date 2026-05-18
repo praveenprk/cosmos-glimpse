@@ -57,7 +57,6 @@ function showImage(image) {
     bg.style.backgroundImage = `url(${JSON.stringify(image.url)})`;
 
     // Populate info
-    infoDate.textContent   = formatDate(image.date);
     infoTitle.textContent  = image.title || "Unknown";
     infoCredit.textContent = image.credit || "NASA";
 
