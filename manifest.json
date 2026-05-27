@@ -20,7 +20,10 @@
   "chrome_url_overrides": {
     "newtab": "newtab.html"
   },
-
+  "web_accessible_resources": [{
+    "resources": ["saved.html", "saved.css", "saved.js"],
+    "matches": ["<all_urls>"]
+  }],
   "icons": {
     "16":  "icons/icon16.png",
     "48":  "icons/icon48.png",

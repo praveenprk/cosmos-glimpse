@@ -315,13 +315,21 @@ html, body {
   border-radius: 2px;
 }
 
-/* ── API Badge ──────────────────────────────────────────────── */
+/* ── Bottom Right ───────────────────────────────────────────── */
 
-.api-badge {
+.bottom-right {
   position: fixed;
   bottom: 40px;
   right: 40px;
   z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* ── API Badge ──────────────────────────────────────────────── */
+
+.api-badge {
   font-family: 'Inconsolata', monospace;
   font-size: 0.6rem;
   letter-spacing: 0.14em;
@@ -333,6 +341,67 @@ html, body {
 
 .api-badge.visible {
   opacity: 1;
+}
+
+/* ── Heart / Save Button ────────────────────────────────────── */
+
+.save-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  color: rgba(240, 237, 230, 0.55);
+  cursor: pointer;
+  transition: color 0.3s, transform 0.2s;
+  opacity: 0;
+  line-height: 1;
+  padding: 0;
+}
+
+.save-btn.visible {
+  opacity: 1;
+}
+
+.save-btn:hover {
+  color: #e05a7a;
+  transform: scale(1.2);
+}
+
+.save-btn.saved {
+  color: #e05a7a;
+}
+
+/* ── Bottom Center ──────────────────────────────────────────── */
+
+.bottom-center {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+}
+
+.branding {
+  color: var(--white-faint);
+}
+
+.branding-sep {
+  color: var(--gold-dim);
+}
+
+.saved-link {
+  color: var(--white-faint);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.saved-link:hover {
+  color: var(--gold);
 }
 
 /* ── Utility ────────────────────────────────────────────────── */

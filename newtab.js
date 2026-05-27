@@ -15,6 +15,7 @@ const drawer        = document.getElementById("explanation-drawer");
 const closeDrawer   = document.getElementById("close-drawer");
 const explanationTx = document.getElementById("explanation-text");
 const apiBadge      = document.getElementById("api-badge");
+const saveBtn       = document.getElementById("save-btn");
 
 // ─── State ────────────────────────────────────────────────────────────────────
 
@@ -80,11 +81,14 @@ function showImage(image) {
         infoPanel.classList.remove("hidden");
         expandBtn.classList.remove("hidden");
         apiBadge.classList.remove("hidden");
+        saveBtn.classList.remove("hidden");
 
         requestAnimationFrame(() => {
           infoPanel.classList.add("visible");
           expandBtn.classList.add("visible");
           apiBadge.classList.add("visible");
+          saveBtn.classList.add("visible");
+          checkSaved(image.id);
         });
       }, 400);
     });
@@ -171,7 +175,39 @@ retryBtn.addEventListener("click", () => {
   infoPanel.classList.remove("visible");
   expandBtn.classList.remove("visible");
   apiBadge.classList.remove("visible");
+  saveBtn.classList.remove("visible", "saved");
+  saveBtn.classList.add("hidden");
+  saveBtn.textContent = "♡";
   requestImage();
+});
+
+// ─── Save / Unsave ───────────────────────────────────────────────────────────
+
+function checkSaved(id) {
+  chrome.storage.local.get("savedImages", (data) => {
+    const saved = data.savedImages || [];
+    const isSaved = saved.some(img => img.id === id);
+    saveBtn.textContent = isSaved ? "♥" : "♡";
+    saveBtn.classList.toggle("saved", isSaved);
+  });
+}
+
+saveBtn.addEventListener("click", () => {
+  if (!currentImage) return;
+  chrome.storage.local.get("savedImages", (data) => {
+    let saved = data.savedImages || [];
+    const idx = saved.findIndex(img => img.id === currentImage.id);
+    if (idx === -1) {
+      saved.unshift(currentImage); // add to front
+      saveBtn.textContent = "♥";
+      saveBtn.classList.add("saved");
+    } else {
+      saved.splice(idx, 1); // remove
+      saveBtn.textContent = "♡";
+      saveBtn.classList.remove("saved");
+    }
+    chrome.storage.local.set({ savedImages: saved });
+  });
 });
 
 // ─── Init ─────────────────────────────────────────────────────────────────────

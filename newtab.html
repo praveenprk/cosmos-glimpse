@@ -30,7 +30,6 @@
 
   <!-- Image info panel — bottom left -->
   <div id="info-panel" class="info-panel hidden">
-    <p class="info-date" id="info-date"></p>
     <h1 class="info-title" id="info-title"></h1>
     <p class="info-credit" id="info-credit"></p>
     <a class="info-source" id="info-source" target="_blank" rel="noopener noreferrer">
@@ -48,8 +47,18 @@
     <p id="explanation-text" class="explanation-text"></p>
   </div>
 
-  <!-- Bottom right: API badge -->
-  <div id="api-badge" class="api-badge hidden"></div>
+  <!-- Bottom right: API badge + heart -->
+  <div class="bottom-right">
+    <div id="api-badge" class="api-badge hidden"></div>
+    <button id="save-btn" class="save-btn hidden" title="Save this image">♡</button>
+  </div>
+
+  <!-- Bottom center: branding + saved link -->
+  <div class="bottom-center">
+    <span class="branding">CosmosGlimpse</span>
+    <span class="branding-sep">·</span>
+    <a href="saved.html" class="saved-link" target="_blank">saved</a>
+  </div>
 
   <script src="newtab.js"></script>
 </body>
